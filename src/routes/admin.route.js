@@ -17,9 +17,10 @@ router.get('/dashboard',[validarJWT, validarRol([2])], getAllArticles)
 
 // Ruta crear pelicula
 router.post('/crearArticulo', [
-       upload.single("imagen"),
+       
        validarJWT, 
        validarRol([2]),
+       upload.single("imagen"),
     // Título
     check("titulo")
         .notEmpty().withMessage("Debes escribir el título")
@@ -32,7 +33,7 @@ router.post('/crearArticulo', [
 ], anadirArticulo)
 
 //Ruta editar película
-router.post('/editarArticulo/:id',[   
+router.put('/editarArticulo/:id',[   
     validarJWT,
     validarRol([2]),
     upload.single("imagen"),

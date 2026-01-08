@@ -8,7 +8,8 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
     "node": "^24.12.0",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "uuid": "^13.0.0"
   },
   "name": "nutri-app-server",
   "version": "1.0.0",
@@ -16,8 +17,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",

@@ -109,7 +109,8 @@ const editarArticulo = async (req, res) => {
 
     return res.status(200).json({
       ok: true,
-      msg: "Artículo actualizado correctamente"
+      msg: "Artículo actualizado correctamente",
+      data: actualizado
     });
 
   } catch (error) {
@@ -151,6 +152,7 @@ const getArticuloPorId = async (req, res) => {
     console.log('hola desde get articulo por id en admin controller')
   try {
     const { id } = req.params
+    console.log(id, 'id del artículo que quiero buscar')
 
     const articulo = await getArticuloPorID(id)
     console.log(`Este es el artículo con id ${id}`, articulo)
@@ -160,10 +162,10 @@ const getArticuloPorId = async (req, res) => {
     }
 
     res.json({
-      id: articulo.id,
+      id: articulo.id_articulo,
       titulo: articulo.titulo,
       contenido: articulo.contenido,
-      imagen: articulo.imagen
+      imagen: articulo.imagen_url
     })
   } catch (error) {
     res.status(500).json({ msg: "Error del servidor" })
