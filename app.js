@@ -9,8 +9,8 @@ const path = require('path');//se usa para trabajar con rutas de archivos y carp
 // const upload = multer({ storage: multer.memoryStorage() });
 
 
-// const swaggerUi = require('swagger-ui-express');
-// const swaggerDocument = require('./swagger.json');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 
 
@@ -52,10 +52,8 @@ app.use(cors(
 
 
 
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-
-//TEMPLATES
 
 //MIDDLEWARE
 app.use(express.json()) //permite que el server etienda solicitudes con cuerpo JSON

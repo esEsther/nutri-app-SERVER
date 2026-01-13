@@ -23,9 +23,7 @@ router.delete('/deleteFavorito/:id/:tipo',[validarJWT, validarRol([1])], borrarD
 
 router.post('/anadirReceta', [validarJWT, validarRol([1])], anadirReceta)
 
-// router.get('/recetasFavoritas', [validarJWT, validarRol([1])], getRecetasFavoritas)
-// router.get('/', [validarJWT, validarRol([1])], getTodoLosFavoritos)
-// router.delete('/deleteFavorito/:id',[validarJWT, validarRol([1])], borrarDeFavoritos)
+
 
 router.post('/traducir',
     [validarJWT, validarRol([1])],

@@ -116,7 +116,7 @@ const guardarEnFavoritos = async (req,res) => {
         // El estado 201 significa que una solicitud se realizó correctamente y se creó un nuevo recurso.
         return res.status(201).json({
             ok: true,
-            msg: "Articulo guardado en Favoritos",
+            msg: "Elemento guardado en favoritos guardado en Favoritos",
             data
         })
     } catch (error) {
