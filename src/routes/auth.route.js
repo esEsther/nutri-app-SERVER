@@ -9,34 +9,43 @@ const {validarRol} = require("../middlewares/roles.middleware")
 
 // REGISTER
 router.post('/signup', [
-    check("nombre")
-        .not().isEmpty().withMessage("Debes escribir el título")
-        .isLength({min:1, max:50}).withMessage("El nombre no tiene la longitud correcta"),
-    check("email")
-        .not().isEmpty().withMessage("Debes escribir el email")
-        .isEmail().withMessage("Debes escribir un email correcto")
-        .isLength({min:1, max:100}).withMessage("No tiene la logitud correcta"),
-    check("contrasenia")
-        .not().isEmpty().withMessage("Debes escribir la contraseña")
-        .isLength({min:1, max:250}).withMessage("La contraseña no tiene la longitud correcta")
+     // Nombre
+  check("nombre")
+    .notEmpty().withMessage("Debes escribir el nombre")
+    .isLength({ min: 2, max: 50 })
+    .withMessage("El nombre debe tener entre 2 y 50 caracteres")
+    .trim(),
+  // Email
+  check("email")
+    .notEmpty().withMessage("Debes escribir el email")
+    .isEmail().withMessage("El email no tiene un formato válido")
+    .isLength({min: 5,  max: 100 })
+    .withMessage("El email no puede superar los 100 caracteres"),
+  // Contraseña
+  check("contrasenia")
+    .notEmpty().withMessage("Debes escribir la contraseña")
+    .isLength({ min: 1, max: 250 }).withMessage("La contraseña no tiene la longitud correcta")   
     // validateInputs
 ], createUser)  
 
 //LOGIN
-router.post('/login',loginUser)
-    // [
-    // check("email")
-    //     .not().isEmpty().withMessage("Debes escribir el email")
-    //     .isEmail().withMessage("Debes escribir un email correcto")
-    //     .isLength({min:1, max:100}).withMessage("No tiene la logitud correcta"),
-    // check("contrasenia")
-    //     .not().isEmpty().withMessage("Debes escribir el título")
-    //     .isLength({min:1, max:250}).withMessage("La contraseña no tiene la longitud correcta"),
-    // validateInputs], 
+router.post('/login', [
+     // Email
+  check("email")
+    .notEmpty().withMessage("Debes escribir el email")
+    .isEmail().withMessage("El email no tiene un formato válido")
+    .isLength({min: 5,  max: 100 })
+    .withMessage("El email no puede superar los 100 caracteres"),
+  // Contraseña
+  check("contrasenia")
+    .notEmpty().withMessage("Debes escribir la contraseña")
+    .isLength({ min: 1, max: 250 }).withMessage("La contraseña no tiene la longitud correcta")   
+    // validateInputs
+], loginUser)
 
 //RENEWTOKEN
-router.post('/renew', renewToken)
-// , [validarJWT] 
+router.post('/renew', [validarJWT] , renewToken)
+
 
 //LOG OUT
 

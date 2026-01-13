@@ -2,8 +2,9 @@ const jwt = require("jsonwebtoken");
 
 
 const validarJWT = (req, res, next) =>{
+    // console.log(req.headers)
     const token = req.headers['authorization'].split(" ")[1]
-    console.log(token)
+    // console.log(token)
     if(!token){
         return res.status(401).json({
             ok: false,
@@ -20,7 +21,7 @@ const validarJWT = (req, res, next) =>{
             msg: "PAYLOAD NO VALIDO"
         })
         }
-        console.log({payload})
+        // console.log({payload})
         const userToken = {
             uid: payload.uid,
             rol: payload.rol

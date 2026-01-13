@@ -1,8 +1,9 @@
 const {connection} = require('../config/dbConnect') 
 const {authQuerys} = require("./auth.querys.js");
 
-const findOne = async (email) => {
+const findOneUser = async (email) => {
   let client, result
+  // console.log('Hola desde el model encontrar')
   try {
     client = await connection();
     result = await client.query(authQuerys.findOne, [email])
@@ -12,11 +13,12 @@ const findOne = async (email) => {
     return error;
   } finally{
     await client.end()
-    console.log("<==============CIERRE DE CONEXIÓN=============>")
+    // console.log("<==============CIERRE DE CONEXIÓN=============>")
   }
 }
  const anadir_usuario = async (nombre, email, hashedPassword, id_rol) => {
   let client, result
+  // console.log('hola desde el modelo crear usuario')
   try {
     client = await connection();
     // hacer la query
@@ -27,12 +29,12 @@ const findOne = async (email) => {
     return error;
   } finally{
     await client.end()
-    console.log("<==============CIERRE DE CONEXIÓN=============>")
+    // console.log("<==============CIERRE DE CONEXIÓN=============>")
   }
 }
 
 
 module.exports= {
-  findOne,
+  findOneUser,
   anadir_usuario
 }

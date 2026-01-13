@@ -16,10 +16,11 @@ const connection = async () => {
     } catch (error) {
         console.error("Error al conectar con PostgreSQL", error);
         return error
-    } finally{
-        //esta parte se ejecuta siempre haya error o no, pero en este caso no cierra la conexión,
-        //solo imprime el mensaje
-        console.log('Matando el servidor')
-    }
+    } 
+    // finally{
+    //     //esta parte se ejecuta siempre haya error o no, pero en este caso no cierra la conexión,
+    //     //solo imprime el mensaje
+    //     console.log('Matando el servidor')
+    // }
 };
 module.exports = {connection};

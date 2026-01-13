@@ -1,11 +1,12 @@
 const bcrypt = require("bcryptjs");
-const {findOne, anadir_usuario} = require("../models/auth.model")
+const {anadir_usuario, findOneUser} = require("../models/auth.model")
 const {JWTGenerator} = require("../helpers/jwt")
 
 
 const createUser = async (req, res) => {
     console.log('Hola desde create user')
     try {
+        
         console.log(req.body, 'req.body desde create user')
         const { nombre_usuario, email, password } = req.body;
         
@@ -14,7 +15,7 @@ const createUser = async (req, res) => {
             return res.status(400).json({ ok: false, msg: "Faltan campos obligatorios" });
         }
 
-        const existe = await findOne(email);
+        const existe = await findOneUser(email);
         if (existe) {
             return res.status(409).json({ ok: false, msg: "Usuario existente" });
         }
@@ -22,7 +23,7 @@ const createUser = async (req, res) => {
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(password, salt);
 
-        const id_rol = 1;
+        let id_rol = 1;
         const savedUser = await anadir_usuario(nombre_usuario, email, hashedPassword, id_rol);
 
         const payload = { uid: savedUser.id_usuario, rol: savedUser.id_rol };
@@ -55,7 +56,7 @@ const loginUser = async (req, res) => {
         const {email, contrasenia} = req.body
         console.log(contrasenia)
         
-        const usuario = await findOne(email);
+        const usuario = await findOneUser(email);
         if(!usuario){
             return res.status(400).json({
                 ok:false,

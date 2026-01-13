@@ -1,6 +1,7 @@
-const {borrarFavorito, existeEnFavoritos, getArticuloPorID,getArticuloPorTitulo, getTodosLosFAVORITOS, guardarFavorito} = require('../models/user.model')
+const {borrarFavorito, existeEnFavoritos, getArticuloPorID,getArticuloPorTitulo, getTodosLosFAVORITOS, guardarFavorito, findOne, anadirRECETA} = require('../models/user.model')
 const {getAllArticlesModel} = require('../models/inicio.models')
-
+const { body } = require('express-validator')
+const deeplApiKey = process.env.DEEPL_APIKEY
 const getAllArticles = async (req, res) => {
     // console.log('hola desde inicio controllers get all articles')
     try {
@@ -72,11 +73,13 @@ const buscarArticulo = async (req, res) => {
 const getTodoLosFavoritos = async (req, res) => {
     try {
         const id_usuario = req.userToken.uid;
-        const data = await getTodosLosFAVORITOS(id_usuario)
-        console.log("Estos son los artículos favoritos del usario:", data)
+        const {tipo} = req.params
+        console.log(tipo, id_usuario)
+        const data = await getTodosLosFAVORITOS(id_usuario, tipo)
+        console.log("Estos son los favoritos del usario:", data)
         return res.status(200).json({ //resp satisfactoria
             ok: true,
-            msg: "TODO OK",
+            msg: "TODO OK", 
             data
         })
     } catch (error) {
@@ -90,26 +93,25 @@ const getTodoLosFavoritos = async (req, res) => {
 
 const guardarEnFavoritos = async (req,res) => {
 
-    const body = req.body
     try {
-        const { id_articulo } = req.body;
+        const { id_articulo, id_receta } = req.body;
         const id_usuario = req.userToken.uid;
-
-        if (!id_articulo) {
+        // console.log('hola desde guardar en fav controller', req.body)
+        if (!id_articulo && !id_receta) {
         return res.status(400).json({
             ok: false,
             msg: "Se requiere el ID del artículo"
         });
         }
 
-        const existeFavorito = await existeEnFavoritos(id_articulo, id_usuario)
+        const existeFavorito = await existeEnFavoritos(id_articulo, id_receta, id_usuario)
         if(existeFavorito){
             return res.status(400).json({
                 ok: false,
                 msg: "Ya existe este artículo en favoritos",
             })
         }
-        const data = await guardarFavorito(id_articulo, id_usuario)
+        const data = await guardarFavorito(id_articulo, id_receta,  id_usuario)
         console.log("El artículo se ha guardado en favoritos", data)
         // El estado 201 significa que una solicitud se realizó correctamente y se creó un nuevo recurso.
         return res.status(201).json({
@@ -130,12 +132,13 @@ const guardarEnFavoritos = async (req,res) => {
 };
 
 const borrarDeFavoritos = async (req,res) => {
-
-    console.log(req.params)
+    
+    // console.log(req.params)
     try {
-        const { id } = req.params;
+        const { id, tipo } = req.params;
         const id_usuario = req.userToken.uid;
-
+        const id_articulo = tipo === 'articulo' ? id : null
+        const id_receta = tipo === 'receta' ? id :null
         if (!id) {
         return res.status(400).json({
             ok: false,
@@ -143,15 +146,15 @@ const borrarDeFavoritos = async (req,res) => {
         });
         }
 
-        const existeFavorito = await existeEnFavoritos(id, id_usuario)
+        const existeFavorito = await existeEnFavoritos(id_articulo, id_receta, id_usuario)
         if(!existeFavorito){
             return res.status(400).json({
                 ok: false,
                 msg: "No existe en favoritos, por lo que no se puede borrar",
             })
         }
-        const data = await borrarFavorito(id, id_usuario)
-        console.log("El artículo se ha borrado de favoritos", data)
+        const data = await borrarFavorito(id_articulo, id_receta, id_usuario)
+        // console.log("Se ha borrado de favoritos", data)
         // El estado 201 significa que una solicitud se realizó correctamente y se creó un nuevo recurso.
         return res.status(201).json({
             ok: true,
@@ -185,6 +188,76 @@ const getArticuloPorId = async (req, res) => {
     }
 }
 
+const traducir = async (req, res) => {
+  const { text, source, target } = req.body;
+
+  if (!text || !source || !target) {
+    return res.status(400).json({
+                ok: false,
+                msg: "Faltan campos text, source o target",
+            })
+        }
+
+  try {
+    const params = new URLSearchParams();
+    params.append("text", text);
+    params.append("source_lang", source.toUpperCase());
+    params.append("target_lang", target.toUpperCase());
+
+    const resp = await fetch("https://api-free.deepl.com/v2/translate", {
+      method: "POST",
+      headers: {
+        "Authorization": `DeepL-Auth-Key ${deeplApiKey}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: params.toString(),
+    });
+
+    const data = await resp.json();
+     return res.status(200).json({
+            ok: true,
+            msg: "TODO OK",
+            data
+        })
+  } catch (error) {
+    console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "error, contacta con el administrador"
+        })
+  }
+}
+
+const anadirReceta = async (req, res) => {
+    const body = req.body
+    console.log(body)
+    try {
+        const existe = await findOne(body.id_receta);
+        console.log(existe, "existe desde user controllers")
+        if(existe){
+            return res.status(401).json({
+                ok:false,
+                msg: "Ya hay una receta con este título"
+            })
+        }
+        
+        const data = await anadirRECETA(body)
+        console.log("Se ha añadido este artículo:", data);
+        return res.status(201).json({
+            ok: true,
+            msg: "Artículo añadido correctamente",
+            data
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "Ha habido un problema, contacta con su administrador"
+        })
+    }
+}
+
+
 module.exports={
     borrarDeFavoritos,
     getAllArticles,
@@ -192,5 +265,7 @@ module.exports={
     getTodoLosFavoritos,
     guardarEnFavoritos,
     getAllArticles,
-    getArticuloPorId
+    getArticuloPorId,
+    traducir,
+    anadirReceta
 }
