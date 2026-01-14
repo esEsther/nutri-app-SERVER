@@ -4,7 +4,7 @@ const getAllArticles = async (req, res) => {
     // console.log('hola desde inicio controllers get all articles')
     try {
         const data = await getAllArticlesModel()
-        console.log ("-.-.--.-. estos son todos los artículos -.- .-.-.", data)
+        // console.log ("-.-.--.-. estos son todos los artículos -.- .-.-.", data)
         return res.status(200).json({
             //la solicitud ha tenido éxito
             ok: true,
@@ -22,7 +22,7 @@ const getAllArticles = async (req, res) => {
 }
 
 const getTodasLasRecetas = async (req, res) => {
-    console.log('hola desde inicio controllers get todas las recetas')
+    // console.log('hola desde inicio controllers get todas las recetas')
     try {
         const data = await getTodasLasRECETAS()
         // console.log ("-.-.--.-. estos son todos las recetas -.- .-.-.", data)

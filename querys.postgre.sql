@@ -1,3 +1,10 @@
+DROP TABLE IF EXISTS favoritos cascade;
+DROP TABLE IF EXISTS usuarios CASCADE;
+DROP TABLE IF EXISTS rol CASCADE;
+DROP TABLE IF EXISTS articulos CASCADE;
+DROP TABLE IF EXISTS Recetas CASCADE;
+
+
 CREATE TABLE articulos (
     id_articulo SERIAL PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
@@ -24,15 +31,44 @@ CREATE TABLE usuarios (
 
 CREATE TABLE favoritos (
     id_favoritos SERIAL PRIMARY KEY,
-    id_peliculas INT REFERENCES articulos(id_articulo),
+    id_articulo INT REFERENCES articulos(id_articulo),
+    id_usuario INT REFERENCES usuarios(id_usuario)
+);
+CREATE TABLE recetasFavoritas (
+    id_favoritos SERIAL PRIMARY KEY,
+    id_receta INT REFERENCES recetas(id_receta),
     id_usuario INT REFERENCES usuarios(id_usuario)
 );
 
+CREATE TABLE  recetas (
+    id_receta INT PRIMARY KEY,
+    titulo VARCHAR(150) NOT NULL,
+    imagen_url VARCHAR(255),
+    contenido VARCHAR(15000)
+);
 
 SELECT * FROM usuarios;
 SELECT * FROM rol;
 SELECT * FROM articulos;
 SELECT * FROM favoritos;
+SELECT * FROM recetasFavoritas;
+SELECT * FROM recetas;
+
+
+
+SELECT *
+FROM recetas
+ORDER BY id_receta ASC
+LIMIT 8;
+
+DELETE FROM recetas
+WHERE id_receta IN (
+    SELECT id_receta
+    FROM recetas
+    ORDER BY id_receta ASC
+    LIMIT 4
+);
+
 
 INSERT INTO articulos (titulo, imagen_url, contenido) VALUES
 (
@@ -85,4 +121,3 @@ INSERT INTO articulos (titulo, imagen_url, contenido) VALUES
   'https://images.unsplash.com/photo-1494390248081-4e521a5940db',
   'Existen muchos mitos en torno a la nutrición, como eliminar por completo los carbohidratos o demonizar las grasas. Informarse a través de fuentes fiables es fundamental para tomar decisiones saludables.'
 );
-
