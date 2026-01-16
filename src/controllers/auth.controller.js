@@ -42,19 +42,13 @@ const createUser = async (req, res) => {
 };
 
 
-/*
- * TODO: 
- *  1.  Recoger el email y password del req.body
- *  2.  Comprobar si no existe un usuario con ese email
- *  3.  Comparar que las contraseñas coinciden
- *  4.  Generar el token
- */
+
 const loginUser = async (req, res) => {
 
-    console.log('Hola desde auth controlleres, loginUser')
+    // console.log('Hola desde auth controlleres, loginUser')
     try {
         const {email, contrasenia} = req.body
-        console.log(contrasenia)
+        // console.log(contrasenia)
         
         const usuario = await findOneUser(email);
         if(!usuario){
@@ -65,8 +59,8 @@ const loginUser = async (req, res) => {
         }
         
         const passwordOk = bcrypt.compareSync(contrasenia, usuario.contrasenia)
-        console.log(usuario.contrasenia)
-        console.log(passwordOk, 'esta es la comparación de contraseña haseada del usuario ', email)
+        // console.log(usuario.contrasenia)
+        // console.log(passwordOk, 'esta es la comparación de contraseña haseada del usuario ', email)
 
         if(!passwordOk){
             return res.status(401).json({
@@ -79,7 +73,7 @@ const loginUser = async (req, res) => {
             uid: usuario.id_usuario,
             rol: usuario.id_rol
         }
-        console.log(payload)
+        // console.log(payload)
         const token = await JWTGenerator(payload)
         console.log(token)
         
@@ -100,7 +94,7 @@ const loginUser = async (req, res) => {
 
 
 const renewToken = async (req, res) => {
-     console.log('Hola desde auth controlleres, renewToken')
+    //  console.log('Hola desde auth controlleres, renewToken')
     const {uid, rol} = req.userToken;
     //console.log(uid, rol)
 

@@ -12,10 +12,6 @@ const {upload} = require("../middlewares/upload");
 ////////////-----------------RUTAS ARTICULOS-------------------
 
 
-// router.get('/dashboard',[validarJWT, validarRol([2])], getAllArticles)
-// router.get('/dashboard/:id',[validarJWT, validarRol([2])], getArticuloPorID)
-
-
 router.post('/crearArticulo', [
        
        validarJWT, 

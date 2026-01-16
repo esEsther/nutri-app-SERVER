@@ -26,12 +26,6 @@ const getAllArticles = async (req, res) => {
 const buscarArticulo = async (req, res) => {
     const {titulo} = req.query
 
-    //req.query es un objeto que contiene los parámentros de la url después del ?
-    //Ejemplo: GET /articulos?titulo=nutricion
-    // req.query = {
-    //     titulo: "nutricion",
-    // }
-
     if(!titulo) {
         // Error 400 es que hubo algún tipo de problema en la comunicación de tu navegador al servidor, es decir, que no se puedo realizar la acción solicitada.
         return res.status(400).json({

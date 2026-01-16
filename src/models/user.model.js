@@ -111,6 +111,7 @@ const findOne = async (id) => {
     await client.end()
   }
 }
+
 const anadirRECETA = async ({id_receta, titulo, contenido, imagen_url }) => {
   let client, result
   try {

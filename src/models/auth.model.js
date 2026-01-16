@@ -16,6 +16,7 @@ const findOneUser = async (email) => {
     // console.log("<==============CIERRE DE CONEXIÓN=============>")
   }
 }
+
  const anadir_usuario = async (nombre, email, hashedPassword, id_rol) => {
   let client, result
   // console.log('hola desde el modelo crear usuario')
